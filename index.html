@@ -1028,6 +1028,7 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  
   <script>    
     // پخش صوت
     function playSound(soundName) {
@@ -2248,15 +2249,17 @@ function rejectRequest(requestId, requestType) {
     
     // مقداردهی اولیه
 // ✅ تنظیمات JSONBin.io
-// ✅ تنظیمات JSONBin.io
 const JSONBIN_API_KEY  = '$2a$10$Q1wyKwgf3PhXqLGb7zOeUuht6K6r8ACqD6a9xHy2pqtfN5Nm76.Z.';
 const JSONBIN_BIN_ID   = '686a64cf8a456b7966bc4202';
 const JSONBIN_BASE_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
+// 📥 بارگذاری داده‌ها از JSONBin
 async function loadDataFromJSONBin() {
   try {
     const response = await fetch(`${JSONBIN_BASE_URL}/latest`, {
-      headers: { 'X-Master-Key': JSONBIN_API_KEY }
+      headers: {
+        'X-Master-Key': JSONBIN_API_KEY
+      }
     });
     const json = await response.json();
     return json.record;
@@ -2284,6 +2287,8 @@ loadDataFromJSONBin().then(data => {
     adminProfile      = data.adminProfile      || { name: 'عباس', photo: '...' };
   }
 });
+
+// 📤 ذخیره داده‌ها در JSONBin
 async function saveDataToJSONBin(data) {
   try {
     const response = await fetch(JSONBIN_BASE_URL, {
@@ -2297,10 +2302,11 @@ async function saveDataToJSONBin(data) {
     });
     return await response.json();
   } catch (err) {
-    console.error('خطا در ذخیره در JSONBin:', err);
+    console.error('خطا در ذخیره‌سازی در JSONBin:', err);
   }
 }
 
+// 📦 ذخیره همه اطلاعات سیستم به JSONBin
 async function saveAllToJSONBin() {
   const data = {
     employees,
@@ -2312,7 +2318,7 @@ async function saveAllToJSONBin() {
   };
   await saveDataToJSONBin(data);
 }
-// متغیرهای سیستمی
+
   // ⬇️ این کد از قبل وجود داشت
   $(document).ready(function() {
     // تنظیم تقویم فارسی
