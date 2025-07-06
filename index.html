@@ -1,14 +1,4 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>SAMANE/H-GH-TEST</title>
-  
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -616,7 +606,7 @@
         <h3 class="section-title">ثبت کارمند جدید</h3>
         <div class="form-group">
           <label for="employeeLastName">نام خانوادگی:</label>
-          <input type="text" id="employeeLastName" placeholder="فقط نام خانوادگی را وارد کنید">
+          <input type="text" id="lastName" placeholder="فقط نام خانوادگی را وارد کنید">
           <small>نام کوچک نیاز نیست</small>
         </div>
         <div class="form-group">
@@ -1101,116 +1091,126 @@ loadDataFromJSONBin().then(data => {
     
     // نمایش فرم ورود
     function showLoginForm(role) {
-      currentRole = role;
-      $('#loginPage').addClass('hidden');
-      
-      let title = '';
-      switch(role) {
-        case 'admin':
-          title = '👑 ورود مدیر';
-          break;
-        case 'employee':
-          title = '👤 ورود کارمند';
-          break;
-        case 'transport':
-          title = '🚗 ورود مسئول نقلیه';
-          break;
-      }
-      
-      $('#loginFormTitle').text(title);
-      $('#loginForm').removeClass('hidden').addClass('fade-in');
-      
-      if (role === 'admin') {
-        $('#username').val('عباس');
-      } else {
-        $('#username').val('');
-      }
-      $('#password').val('');
-    }
-    
+  currentRole = role;
+  $('#loginPage').addClass('hidden');
+  
+  let title = '';
+  switch(role) {
+    case 'admin':
+      title = '👑 ورود مدیر';
+      break;
+    case 'employee':
+      title = '👤 ورود کارمند';
+      break;
+    case 'transport':
+      title = '🚗 ورود مسئول نقلیه';
+      break;
+  }
+
+  $('#loginFormTitle').text(title);
+  $('#loginForm').removeClass('hidden').addClass('fade-in');
+
+  if (role === 'admin') {
+    $('#lastName').val('عباس');
+  } else {
+    $('#lastName').val('');
+  }
+
+  $('#password').val('');
+}
     // بازگشت به صفحه ورود
     function backToLoginPage() {
-      $('#loginForm').addClass('hidden');
-      $('#loginPage').removeClass('hidden').addClass('fade-in');
-      currentRole = null;
-    }
+  $('#loginForm').addClass('hidden');
+  $('#loginPage').removeClass('hidden').addClass('fade-in');
+  currentRole = null;
+}
     
     // ورود به سیستم
     function login() {
-      const username = $('#username').val().trim();
-      const password = $('#password').val().trim();
-      
-      if (!username || !password) {
-        Swal.fire({
-          title: 'خطا',
-          text: 'لطفاً نام کاربری و رمز عبور را وارد کنید',
-          icon: 'error',
-          background: '#1e1e1e',
-          color: '#ffffff',
-          confirmButtonText: 'متوجه شدم'
-        });
-        return;
-      }
-      
-      if (currentRole === 'admin') {
-        if (username === 'عباس' && password === adminPassword) {
-          currentUser = { 
-            name: adminProfile.name, 
-            role: 'admin', 
-            photo: adminProfile.photo 
-          };
-          showAdminPanel();
-        } else {
-          Swal.fire({
-            title: 'خطا',
-            text: 'نام کاربری یا رمز عبور اشتباه است',
-            icon: 'error',
-            background: '#1e1e1e',
-            color: '#ffffff',
-            confirmButtonText: 'متوجه شدم'
-          });
-        }
-      } 
-      else if (currentRole === 'employee') {
-        const employee = employees.find(emp => emp.lastName === username && emp.password === password);
-        if (employee) {
-          currentUser = { 
-            name: employee.lastName, 
-            role: 'employee',
-            photo: employee.photo || 'https://via.placeholder.com/60x60?text=Employee'
-          };
-          showEmployeePanel();
-        } else {
-          Swal.fire({
-            title: 'خطا',
-            text: 'نام کاربری یا رمز عبور اشتباه است',
-            icon: 'error',
-            background: '#1e1e1e',
-            color: '#ffffff',
-            confirmButtonText: 'متوجه شدم'
-          });
-        }
-      }
-      else if (currentRole === 'transport') {
-        if (transportManager && username === transportManager.username && password === transportManager.password) {
-          currentUser = { 
-            name: 'مسئول نقلیه', 
-            role: 'transport',
-            photo: 'https://via.placeholder.com/60x60?text=Transport'
-          };
-          showTransportPanel();
-        } else {
-          Swal.fire({
-            title: 'خطا',
-            text: 'نام کاربری یا رمز عبور اشتباه است',
-            icon: 'error',
-            background: '#1e1e1e',
-            color: '#ffffff',
-            confirmButtonText: 'متوجه شدم'
-          });
-        }
-      }
+  const lastName = $('#lastName').val().trim();
+  const password = $('#password').val().trim();
+  const role = currentRole;
+
+  if (!lastName || !password || !role) {
+    Swal.fire({
+      title: 'خطا',
+      text: 'لطفاً تمام اطلاعات ورود را وارد کنید',
+      icon: 'error',
+      background: '#1e1e1e',
+      color: '#ffffff',
+      confirmButtonText: 'باشه'
+    });
+    return;
+  }
+
+  if (
+    !employees || !adminPassword || !adminProfile ||
+    !Array.isArray(employees) || typeof adminPassword !== 'string'
+  ) {
+    Swal.fire({
+      title: 'در حال بارگذاری اطلاعات',
+      text: 'لطفاً چند ثانیه صبر کنید و دوباره تلاش کنید',
+      icon: 'info',
+      background: '#1e1e1e',
+      color: '#ffffff',
+      confirmButtonText: 'باشه'
+    });
+    return;
+  }
+
+  if (role === 'admin') {
+    if (password === adminPassword) {
+      currentUser = { lastName: adminProfile.name };
+      currentRole = 'admin';
+      $('#adminFullName').val(adminProfile.name);
+      showSection('adminMenu');
+      playSound('M2');
+    } else {
+      Swal.fire({
+        title: 'خطا',
+        text: 'رمز عبور مدیر اشتباه است',
+        icon: 'error',
+        background: '#1e1e1e',
+        color: '#ffffff',
+        confirmButtonText: 'متوجه شدم'
+      });
     }
+  } else if (role === 'employee') {
+    const user = employees.find(emp => emp.lastName === lastName && emp.password === password);
+    if (user) {
+      currentUser = user;
+      currentRole = 'employee';
+      showSection('employeeMenu');
+      playSound('M2');
+    } else {
+      Swal.fire({
+        title: 'خطا',
+        text: 'کارمند با این مشخصات یافت نشد',
+        icon: 'error',
+        background: '#1e1e1e',
+        color: '#ffffff',
+        confirmButtonText: 'متوجه شدم'
+      });
+    }
+  } else if (role === 'transport') {
+    if (transportManager && lastName === transportManager.lastName && password === transportManager.password) {
+      currentUser = transportManager;
+      currentRole = 'transport';
+      showSection('transportMenu');
+      playSound('M2');
+    } else {
+      Swal.fire({
+        title: 'خطا',
+        text: 'مشخصات مسئول نقلیه اشتباه است',
+        icon: 'error',
+        background: '#1e1e1e',
+        color: '#ffffff',
+        confirmButtonText: 'متوجه شدم'
+      });
+    }
+  }
+}
+
     
     // نمایش پنل مدیر
     function showAdminPanel() {
@@ -1382,29 +1382,54 @@ loadDataFromJSONBin().then(data => {
 }
     
     // نمایش لیست کارمندان
-    function loadEmployees() {
-      let html = '';
-      employees.forEach(employee => {
-        html += `
-          <div class="request-item">
-            <div class="profile-header" style="margin-bottom: 10px;">
-              <img src="${employee.photo}" alt="${employee.lastName}" class="profile-pic" style="width: 40px; height: 40px;">
-              <h4>${employee.lastName}</h4>
-            </div>
-            <div class="action-btns">
-              <button class="btn btn-warning action-btn" onclick="editEmployee(${employee.id})">
-                <i class="fas fa-edit"></i> ویرایش
-              </button>
-              <button class="btn btn-danger action-btn" onclick="deleteEmployee(${employee.id})">
-                <i class="fas fa-trash"></i> حذف
-              </button>
-            </div>
-          </div>
-        `;
-      });
-      
-      $('#employeesList').html(html || '<p>هیچ کارمندی ثبت نشده است</p>');
-    }
+    function loginEmployee() {
+  const lastName = $('#employeeLoginLastName').val().trim();
+  const password = $('#employeeLoginPassword').val().trim();
+
+  if (!lastName || !password) {
+    Swal.fire({
+      title: 'خطا',
+      text: 'نام خانوادگی و رمز عبور را وارد کنید',
+      icon: 'error',
+      background: '#1e1e1e',
+      color: '#ffffff',
+      confirmButtonText: 'باشه'
+    });
+    return;
+  }
+
+  // بررسی وجود داده‌ها از JSONBin
+  if (!employees || employees.length === 0) {
+    Swal.fire({
+      title: 'در حال بارگذاری اطلاعات',
+      text: 'لطفاً چند لحظه صبر کنید و دوباره تلاش کنید',
+      icon: 'info',
+      background: '#1e1e1e',
+      color: '#ffffff',
+      confirmButtonText: 'باشه'
+    });
+    return;
+  }
+
+  const user = employees.find(emp => emp.lastName === lastName && emp.password === password);
+
+  if (user) {
+    currentUser = user;
+    currentRole = 'employee';
+    showSection('employeeMenu');
+    playSound('M2');
+  } else {
+    Swal.fire({
+      title: 'خطا',
+      text: 'کارمند با این مشخصات یافت نشد',
+      icon: 'error',
+      background: '#1e1e1e',
+      color: '#ffffff',
+      confirmButtonText: 'متوجه شدم'
+    });
+  }
+}
+
     
     // ویرایش کارمند
     function editEmployee(employeeId) {
@@ -2323,9 +2348,5 @@ function rejectRequest(requestId, requestType) {
     playSound('M1');
   });
 </script>
-</body>
-</html>
-<!-- partial -->
-  
 </body>
 </html>
