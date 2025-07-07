@@ -1117,14 +1117,16 @@
     
     // ورود به سیستم
     function login() {
-  const lastName = $('#lastName').val().trim();
-  const password = $('#password').val().trim();
+  // مقدار نقش را از currentRole بگیر
   const role = currentRole;
 
-  if (!lastName || !password || !role) {
+  const lastName = $('#username').val().trim();
+  const password = $('#password').val().trim();
+
+  if (!lastName || !password) {
     Swal.fire({
       title: 'خطا',
-      text: 'لطفاً تمام اطلاعات ورود را وارد کنید',
+      text: 'لطفاً نام خانوادگی و رمز عبور را وارد کنید',
       icon: 'error',
       background: '#1e1e1e',
       color: '#ffffff',
@@ -1133,14 +1135,11 @@
     return;
   }
 
-  if (
-    !employees || !adminPassword || !adminProfile ||
-    !Array.isArray(employees) || typeof adminPassword !== 'string'
-  ) {
+  if (!role) {
     Swal.fire({
-      title: 'در حال بارگذاری اطلاعات',
-      text: 'لطفاً چند ثانیه صبر کنید و دوباره تلاش کنید',
-      icon: 'info',
+      title: 'خطا',
+      text: 'لطفاً نوع ورود (مدیر، کارمند، نقلیه) را انتخاب کنید',
+      icon: 'error',
       background: '#1e1e1e',
       color: '#ffffff',
       confirmButtonText: 'باشه'
@@ -1154,7 +1153,7 @@
       currentRole = 'admin';
       $('#adminFullName').val(adminProfile.name);
       showSection('adminMenu');
-      playSound('M2');
+      playSound('M1');
     } else {
       Swal.fire({
         title: 'خطا',
@@ -1162,32 +1161,38 @@
         icon: 'error',
         background: '#1e1e1e',
         color: '#ffffff',
-        confirmButtonText: 'متوجه شدم'
+        confirmButtonText: 'باشه'
       });
     }
-  } else if (role === 'employee') {
+  }
+  else if (role === 'employee') {
     const user = employees.find(emp => emp.lastName === lastName && emp.password === password);
     if (user) {
       currentUser = user;
       currentRole = 'employee';
       showSection('employeeMenu');
-      playSound('M2');
+      playSound('M1');
     } else {
       Swal.fire({
         title: 'خطا',
-        text: 'کارمند با این مشخصات یافت نشد',
+        text: 'مشخصات کارمند اشتباه است',
         icon: 'error',
         background: '#1e1e1e',
         color: '#ffffff',
-        confirmButtonText: 'متوجه شدم'
+        confirmButtonText: 'باشه'
       });
     }
-  } else if (role === 'transport') {
-    if (transportManager && lastName === transportManager.lastName && password === transportManager.password) {
+  }
+  else if (role === 'transport') {
+    if (
+      transportManager &&
+      transportManager.lastName === lastName &&
+      transportManager.password === password
+    ) {
       currentUser = transportManager;
       currentRole = 'transport';
       showSection('transportMenu');
-      playSound('M2');
+      playSound('M1');
     } else {
       Swal.fire({
         title: 'خطا',
@@ -1195,13 +1200,11 @@
         icon: 'error',
         background: '#1e1e1e',
         color: '#ffffff',
-        confirmButtonText: 'متوجه شدم'
+        confirmButtonText: 'باشه'
       });
     }
   }
-}
-
-    
+}   
     // نمایش پنل مدیر
     function showAdminPanel() {
       $('#loginForm').addClass('hidden');
