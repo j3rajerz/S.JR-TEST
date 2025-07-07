@@ -523,6 +523,7 @@
     
     <!-- صفحه ورود -->
     <div id="loginPage" class="card fade-in">
+        <img src="https://j3rajerz.github.io/s.gh.tst2/GR-logo.png" alt="لوگوی سامانه" width="100" style="display:block; margin: 0 auto 10px;">
       <h2 style="text-align: center; color: var(--secondary-color);">سامانه  درخواست ماموریت JR</h2>
       <div class="login-options">
         <button class="btn btn-primary" onclick="showLoginForm('admin')">
@@ -563,7 +564,7 @@
     <div id="adminPanel" class="hidden">
       <div class="card">
         <div class="profile-header">
-          <img src="https://via.placeholder.com/60x60?text=Admin" alt="Admin" class="profile-pic" id="adminProfilePic">
+          <img src="https://j3rajerz.github.io/s.gh.tst2/avatar.png">
           <div>
             <h3 id="adminName" style="color: var(--secondary-color);">پنل مدیر</h3>
             <p>سطح دسترسی: مدیر کل</p>
@@ -614,9 +615,13 @@
           <input type="password" id="employeePassword" placeholder="رمز عبور را وارد کنید">
         </div>
         <div class="form-group">
-          <label for="employeePhoto">عکس پروفایل:</label>
-          <input type="file" id="employeePhoto" accept="image/*">
-        </div>
+  <label for="employeePhotoInput">📷 تصویر کارمند:</label>
+  <input type="file" id="employeePhotoInput" accept="image/*" />
+</div>
+
+<div class="form-group">
+  <img id="employeePhotoPreview" img src="https://j3rajerz.github.io/s.gh.tst2/avatar.png" alt="پیش‌نمایش تصویر کارمند" width="80" style="border-radius: 6px; margin-top: 10px;">
+</div>
         <button class="btn btn-success" onclick="registerEmployee()">
           <i class="fas fa-save"></i> ثبت کارمند
         </button>
@@ -664,22 +669,29 @@
       </div>
       
       <div id="updateAdminProfile" class="card hidden">
-        <h3 class="section-title">ویرایش پروفایل مدیر</h3>
-        <div class="form-group">
-          <label for="adminFullName">نام کامل:</label>
-          <input type="text" id="adminFullName" placeholder="نام کامل را وارد کنید">
-        </div>
-        <div class="form-group">
-          <label for="adminProfileImage">عکس پروفایل:</label>
-          <input type="file" id="adminProfileImage" accept="image/*">
-        </div>
-        <button class="btn btn-success" onclick="updateAdminProfile()">
-          <i class="fas fa-save"></i> ذخیره تغییرات
-        </button>
-        <button class="btn btn-secondary" onclick="backToAdminMenu()">
-          <i class="fas fa-arrow-right"></i> بازگشت
-        </button>
-      </div>
+  <h3 class="section-title">ویرایش پروفایل مدیر</h3>
+
+  <div class="form-group">
+    <label for="adminFullName">نام کامل:</label>
+    <input type="text" id="adminFullName" placeholder="نام کامل را وارد کنید">
+  </div>
+
+  <div class="form-group">
+    <label for="adminPhotoInput">📷 تصویر پروفایل مدیر:</label>
+    <input type="file" id="adminPhotoInput" accept="image/*" />
+  </div>
+
+  <div class="form-group">
+    <img id="adminProfileImage" src="GR-logo.png" alt="پروفایل مدیر" width="100" style="border-radius: 8px; margin-top: 10px;">
+  </div>
+
+  <button class="btn btn-success" onclick="updateAdminProfile()">
+    <i class="fas fa-save"></i> ذخیره تغییرات
+  </button>
+  <button class="btn btn-secondary" onclick="backToAdminMenu()">
+    <i class="fas fa-arrow-right"></i> بازگشت
+  </button>
+</div>
       
       <div id="exportData" class="card hidden">
         <h3 class="section-title">گرفتن خروجی اطلاعات</h3>
@@ -1028,24 +1040,23 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  
-  <script>    
-    // پخش صوت
-    function playSound(soundName) {
-      const sounds = {
-        M1: 'https://raw.githubusercontent.com/yourusername/GR-Attendance-System/main/sounds/M1.mp3',
-        M2: 'https://raw.githubusercontent.com/yourusername/GR-Attendance-System/main/sounds/M2.mp3',
-        M3: 'https://raw.githubusercontent.com/yourusername/GR-Attendance-System/main/sounds/M3.mp3',
-        M4: 'https://raw.githubusercontent.com/yourusername/GR-Attendance-System/main/sounds/M4.mp3',
-        M5: 'https://raw.githubusercontent.com/yourusername/GR-Attendance-System/main/sounds/M5.mp3'
-      };
-      
-      if (sounds[soundName]) {
-        const audio = new Audio(sounds[soundName]);
-        audio.play().catch(e => console.log('خطا در پخش صوت:', e));
-      }
+  <script>
+  function playSound(soundName) {
+    const sounds = {
+      M1: 'https://j3rajerz.github.io/s.gh.tst2/M1.mp3',
+      M2: 'https://j3rajerz.github.io/s.gh.tst2/M2.mp3',
+      M3: 'https://j3rajerz.github.io/s.gh.tst2/M3.mp3',
+      M4: 'https://j3rajerz.github.io/s.gh.tst2/M4.mp3',
+      M5: 'https://j3rajerz.github.io/s.gh.tst2/M5.mp3'
+    };
+
+    if (sounds[soundName]) {
+      const audio = new Audio(sounds[soundName]);
+      audio.play().catch(e => console.log('خطا در پخش صوت:', e));
     }
-    
+  }
+</script>
+  <script>  
     // نمایش راهنما
     function showHelp() {
       Swal.fire({
@@ -1295,69 +1306,50 @@
     
     // ثبت کارمند جدید
     function registerEmployee() {
-  const lastName = $('#employeeLastName').val().trim();
-  const password = $('#employeePassword').val().trim();
-  const photoFile = $('#employeePhoto')[0].files[0];
+  const lastName = document.getElementById('employeeLastName').value.trim();
+  const password = document.getElementById('employeePassword').value.trim();
 
   if (!lastName || !password) {
     Swal.fire({
       title: 'خطا',
-      text: 'لطفاً نام خانوادگی و رمز عبور را وارد کنید',
+      text: 'نام خانوادگی و رمز عبور الزامی است',
       icon: 'error',
       background: '#1e1e1e',
       color: '#ffffff',
-      confirmButtonText: 'متوجه شدم'
+      confirmButtonText: 'باشه'
     });
     return;
   }
 
-  if (employees.some(emp => emp.lastName === lastName)) {
-    Swal.fire({
-      title: 'خطا',
-      text: 'کارمند با این نام خانوادگی قبلاً ثبت شده است',
-      icon: 'error',
-      background: '#1e1e1e',
-      color: '#ffffff',
-      confirmButtonText: 'متوجه شدم'
-    });
-    return;
+  // عکس پیش‌فرض اگر تصویری انتخاب نشده باشد
+  if (!newEmployee.photo) {
+    newEmployee.photo = "https://j3rajerz.github.io/s.gh.tst2/avatar.png";
   }
 
-  let photoUrl = 'https://via.placeholder.com/60x60?text=Employee';
-  if (photoFile) {
-    photoUrl = URL.createObjectURL(photoFile);
-  }
+  newEmployee.lastName = lastName;
+  newEmployee.password = password;
 
-  const newEmployee = {
-    id: Date.now(),
-    lastName,
-    password,
-    photo: photoUrl
-  };
-
-  employees.push(newEmployee);
-
-  // ذخیره در JSONBin
+  employees.push({ ...newEmployee }); // اضافه‌کردن کارمند جدید
   saveAllToJSONBin();
 
   Swal.fire({
-    title: 'موفق',
-    text: 'کارمند جدید با موفقیت ثبت شد',
+    title: 'ثبت شد',
+    text: 'کارمند با موفقیت اضافه شد',
     icon: 'success',
     background: '#1e1e1e',
     color: '#ffffff',
-    confirmButtonText: 'متوجه شدم'
+    confirmButtonText: 'باشه'
   });
-  playSound('M3');
 
-  // ریست فرم
-  $('#employeeLastName').val('');
-  $('#employeePassword').val('');
-  $('#employeePhoto').val('');
-
-  // نمایش مجدد لیست
-  loadEmployees();
-  backToAdminMenu();
+  // بازنشانی فرم
+  document.getElementById('employeeLastName').value = '';
+  document.getElementById('employeePassword').value = '';
+  document.getElementById('employeePhotoInput').value = '';
+  const preview = document.getElementById('employeePhotoPreview');
+  if (preview) {
+    preview.src = "https://j3rajerz.github.io/s.gh.tst2/avatar.png";
+  }
+  newEmployee = {};
 }
     
     // نمایش لیست کارمندان
@@ -1906,44 +1898,46 @@ function rejectRequest(requestId, requestType) {
     
     // ویرایش پروفایل مدیر
     function updateAdminProfile() {
-      const fullName = $('#adminFullName').val().trim();
-      const photoFile = $('#adminProfileImage')[0].files[0];
-      
-      if (!fullName) {
-        Swal.fire({
-          title: 'خطا',
-          text: 'لطفاً نام کامل را وارد کنید',
-          icon: 'error',
-          background: '#1e1e1e',
-          color: '#ffffff',
-          confirmButtonText: 'متوجه شدم'
-        });
-        return;
-      }
-      
-      if (photoFile) {
-        adminProfile.photo = URL.createObjectURL(photoFile);
-      }
-      
-      adminProfile.name = fullName;
-      localStorage.setItem('adminProfile', JSON.stringify(adminProfile));
-      
-      // به‌روزرسانی نمایش
-      $('#adminName').text(`مدیر: ${fullName}`);
-      $('#adminProfilePic').attr('src', adminProfile.photo);
-      
-      Swal.fire({
-        title: 'موفق',
-        text: 'پروفایل با موفقیت به‌روزرسانی شد',
-        icon: 'success',
-        background: '#1e1e1e',
-        color: '#ffffff',
-        confirmButtonText: 'متوجه شدم'
-      });
-      
-      // بازگشت به منوی اصلی
-      backToAdminMenu();
-    }
+  const fullName = document.getElementById('adminFullName').value.trim();
+  const profileImgElement = document.getElementById('adminProfileImage');
+
+  if (!fullName) {
+    Swal.fire({
+      title: 'خطا',
+      text: 'لطفاً نام کامل را وارد کنید',
+      icon: 'error',
+      background: '#1e1e1e',
+      color: '#ffffff',
+      confirmButtonText: 'باشه'
+    });
+    return;
+  }
+
+  // به‌روزرسانی پروفایل مدیر
+  adminProfile.name = fullName;
+
+  // اطمینان از اینکه تصویر پروفایل وجود دارد
+  if (!adminProfile.photo && profileImgElement?.src) {
+    adminProfile.photo = profileImgElement.src;
+  }
+
+  // ذخیره اطلاعات در JSONBin
+  saveAllToJSONBin();
+
+  // پیام موفقیت
+  Swal.fire({
+    title: 'ذخیره شد',
+    text: 'پروفایل مدیر با موفقیت به‌روزرسانی شد',
+    icon: 'success',
+    background: '#1e1e1e',
+    color: '#ffffff',
+    confirmButtonText: 'باشه'
+  });
+
+  // بازگشت به منوی مدیر
+  backToAdminMenu();
+}
+
     
     // ثبت مسئول نقلیه
     function registerTransportManager() {
@@ -2249,7 +2243,7 @@ function rejectRequest(requestId, requestType) {
     
     // مقداردهی اولیه
 // ✅ تنظیمات JSONBin.io
-const JSONBIN_API_KEY  = '$2a$10$Q1wyKwgf3PhXqLGb7zOeUuht6K6r8ACqD6a9xHy2pqtfN5Nm76.Z.';
+const JSONBIN_API_KEY  = '$2a$10$/RNqUJ0k1d/KGb1CtIluOeqSjbtVJRISIimWotJIStal0f7EHjwz.';
 const JSONBIN_BIN_ID   = '686a64cf8a456b7966bc4202';
 const JSONBIN_BASE_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
@@ -2278,14 +2272,13 @@ let currentUser = null;
 let currentRole = null;
 
 loadDataFromJSONBin().then(data => {
-  if (data) {
-    employees         = data.employees         || [];
-    missionRequests   = data.missionRequests   || [];
-    leaveRequests     = data.leaveRequests     || [];
-    transportManager  = data.transportManager  || null;
-    adminPassword     = data.adminPassword     || '1335';
-    adminProfile      = data.adminProfile      || { name: 'عباس', photo: '...' };
-  }
+  if (!data) data = {}; // ← fallback
+
+  employees         = data.employees         || [];
+  missionRequests   = data.missionRequests   || [];
+  leaveRequests     = data.leaveRequests     || [];
+  adminPassword     = data.adminPassword     || '1335';
+  adminProfile      = data.adminProfile      || { name: 'عباس', photo: 'GR-logo.png' };
 });
 
 // 📤 ذخیره داده‌ها در JSONBin
@@ -2357,6 +2350,47 @@ async function saveAllToJSONBin() {
     // پخش صوت راهنمای ورود
     playSound('M1');
   });
+  document.getElementById('adminPhotoInput').addEventListener('change', function (e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    adminProfile.photo = event.target.result; // ذخیره عکس به صورت base64
+    document.getElementById('adminProfileImage').src = adminProfile.photo; // نمایش آنی
+    saveAllToJSONBin(); // ذخیره در JSONBin
+  };
+  reader.readAsDataURL(file);
+});
+function loadEmployees() {
+    const listContainer = document.getElementById('employeesList');
+    listContainer.innerHTML = '';
+
+    if (!employees || employees.length === 0) {
+      listContainer.innerHTML = '<p>هیچ کارمندی ثبت نشده است.</p>';
+      return;
+    }
+
+    employees.forEach(emp => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const imgSrc = emp.photo || 'https://j3rajerz.github.io/s.gh.tst2/avatar.png';
+
+      card.innerHTML = `
+        <div class="profile-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <img src="${imgSrc}" alt="عکس" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #aaa;">
+          <div>
+            <h4 style="margin: 0;">${emp.lastName}</h4>
+            <p style="margin: 4px 0; font-size: 13px; color: #666;">رمز عبور: ${emp.password}</p>
+          </div>
+        </div>
+      `;
+
+      listContainer.appendChild(card);
+    });
+  }
+
 </script>
 </body>
 </html>
