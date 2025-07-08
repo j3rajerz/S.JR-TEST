@@ -1140,13 +1140,19 @@ function login() {
     return;
   }
 
+  // 🎩 ورود مدیر
   if (role === 'admin') {
+    console.log("⏳ ورود به عنوان مدیر...");
+    console.log("رمز وارد شده:", password, "| رمز مدیر:", adminPassword);
+
     if (password === adminPassword) {
       currentUser = { lastName: adminProfile.name };
       currentRole = 'admin';
+
       $('#adminFullName').val(adminProfile.name);
       $('#adminProfileImage').attr('src', adminProfile.photo || 'https://j3rajerz.github.io/s.gh.tst2/GR-logo.png');
-      showSection('adminPanel');
+
+      showSection('adminPanel'); // دقت کن این ID با HTML یکی باشه
       playSound('M1');
     } else {
       Swal.fire({
@@ -1160,15 +1166,18 @@ function login() {
     }
   }
 
+  // 👤 ورود کارمند
   else if (role === 'employee') {
     const user = employees.find(emp => emp.lastName === lastName && emp.password === password);
     if (user) {
       currentUser = user;
       currentRole = 'employee';
+
       $('#employeeFullName').text(user.lastName);
       if (user.photo) {
         $('#employeeProfileImage').attr('src', user.photo);
       }
+
       showSection('employeeMenu');
       playSound('M1');
     } else {
@@ -1183,6 +1192,7 @@ function login() {
     }
   }
 
+  // 🚗 ورود مسئول نقلیه
   else if (role === 'transport') {
     if (
       transportManager &&
@@ -1191,6 +1201,7 @@ function login() {
     ) {
       currentUser = transportManager;
       currentRole = 'transport';
+
       showSection('transportMenu');
       playSound('M1');
     } else {
