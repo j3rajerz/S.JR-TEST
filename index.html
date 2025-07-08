@@ -2247,7 +2247,6 @@ function rejectRequest(requestId, requestType) {
   const JSONBIN_BIN_ID   = '686cabfc8960c979a5b905d3';
   const JSONBIN_BASE_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
-  // 🧠 تعریف متغیرهای سراسری فقط یک بار
   let adminPassword = '1335';
   let adminProfile = {
     name: 'عباس',
@@ -2260,11 +2259,12 @@ function rejectRequest(requestId, requestType) {
   let currentUser = null;
   let currentRole = null;
 
-  // 📥 بارگذاری داده‌ها از JSONBin
   async function loadDataFromJSONBin() {
     try {
       const response = await fetch(`${JSONBIN_BASE_URL}/latest`, {
-        headers: { 'X-Master-Key': JSONBIN_API_KEY }
+        headers: {
+          'X-Master-Key': JSONBIN_API_KEY
+        }
       });
       const result = await response.json();
       return result.record;
@@ -2274,7 +2274,6 @@ function rejectRequest(requestId, requestType) {
     }
   }
 
-  // 📤 ذخیره داده‌ها در JSONBin
   async function saveDataToJSONBin(data) {
     try {
       const response = await fetch(`${JSONBIN_BASE_URL}`, {
@@ -2292,7 +2291,6 @@ function rejectRequest(requestId, requestType) {
     }
   }
 
-  // 💾 ذخیره کل اطلاعات سیستم
   async function saveAllToJSONBin() {
     const data = {
       adminPassword,
@@ -2305,7 +2303,6 @@ function rejectRequest(requestId, requestType) {
     await saveDataToJSONBin(data);
   }
 
-  // ⚙️ بارگذاری داده‌ها هنگام لود شدن صفحه
   document.addEventListener('DOMContentLoaded', () => {
     loadDataFromJSONBin().then(data => {
       if (!data) data = {};
@@ -2329,24 +2326,6 @@ function rejectRequest(requestId, requestType) {
       }
     });
   });
-
-  // 📸 بارگذاری تصویر مدیر از ورودی فایل
-  const photoInput = document.getElementById('adminPhotoInput');
-  if (photoInput) {
-    photoInput.addEventListener('change', function (e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        adminProfile.photo = event.target.result;
-        const img = document.getElementById('adminProfileImage');
-        if (img) img.src = adminProfile.photo;
-        saveAllToJSONBin();
-      };
-      reader.readAsDataURL(file);
-    });
-  }
 </script>
 </body>
 </html>
