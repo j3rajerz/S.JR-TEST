@@ -823,14 +823,7 @@
         <div class="form-group">
           <label>زمان رفت:</label>
           <div class="time-picker-container">
-            <select class="time-picker" id="departureHour">
-              <option value="">ساعت</option>
-              <script>
-                for (let i = 0; i < 24; i++) {
-                  document.write(`<option value="${i}">${i.toString().padStart(2, '0')}</option>`);
-                }
-              </script>
-            </select>
+            <select class="time-picker" id="departureHour"></select>
             <select class="time-picker" id="departureMinute">
               <option value="">دقیقه</option>
               <script>
@@ -1056,7 +1049,7 @@
     }
   }
 </script>
-  <script>  
+  <script>
     // نمایش راهنما
     function showHelp() {
       Swal.fire({
@@ -1108,18 +1101,18 @@
 
   $('#password').val('');
 }
-    // بازگشت به صفحه ورود
-    function backToLoginPage() {
+</script>
+  <script>
+// ✅ بازگشت به صفحه انتخاب نقش
+function backToLoginPage() {
   $('#loginForm').addClass('hidden');
   $('#loginPage').removeClass('hidden').addClass('fade-in');
   currentRole = null;
 }
-    
-    // ورود به سیستم
-    function login() {
-  // مقدار نقش را از currentRole بگیر
-  const role = currentRole;
 
+// ✅ ورود به سیستم
+function login() {
+  const role = currentRole;
   const lastName = $('#username').val().trim();
   const password = $('#password').val().trim();
 
@@ -1152,6 +1145,7 @@
       currentUser = { lastName: adminProfile.name };
       currentRole = 'admin';
       $('#adminFullName').val(adminProfile.name);
+      $('#adminProfileImage').attr('src', adminProfile.photo || 'https://j3rajerz.github.io/s.gh.tst2/GR-logo.png');
       showSection('adminPanel');
       playSound('M1');
     } else {
@@ -1165,11 +1159,16 @@
       });
     }
   }
+
   else if (role === 'employee') {
     const user = employees.find(emp => emp.lastName === lastName && emp.password === password);
     if (user) {
       currentUser = user;
       currentRole = 'employee';
+      $('#employeeFullName').text(user.lastName);
+      if (user.photo) {
+        $('#employeeProfileImage').attr('src', user.photo);
+      }
       showSection('employeeMenu');
       playSound('M1');
     } else {
@@ -1183,6 +1182,7 @@
       });
     }
   }
+
   else if (role === 'transport') {
     if (
       transportManager &&
@@ -2243,157 +2243,110 @@ function rejectRequest(requestId, requestType) {
         }
       });
     }
-    
-    // مقداردهی اولیه
-// ✅ تنظیمات JSONBin.io
-const JSONBIN_API_KEY  = '$2a$10$/RNqUJ0k1d/KGb1CtIluOeqSjbtVJRISIimWotJIStal0f7EHjwz.';
-const JSONBIN_BIN_ID   = '686a64cf8a456b7966bc4202';
-const JSONBIN_BASE_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+  const JSONBIN_API_KEY  = '$2a$10$uWFTx5kq0rRqil30BweEK.zO1NCrSN/.gnR2oeWGu4AAwBRvgH5le';
+  const JSONBIN_BIN_ID   = '686cabfc8960c979a5b905d3';
+  const JSONBIN_BASE_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
-// 📥 بارگذاری داده‌ها از JSONBin
-async function loadDataFromJSONBin() {
-  try {
-    const response = await fetch(`${JSONBIN_BASE_URL}/latest`, {
-      headers: {
-        'X-Master-Key': JSONBIN_API_KEY
-      }
-    });
-    const json = await response.json();
-    return json.record;
-  } catch (err) {
-    console.error('خطا در بارگذاری داده‌ها از JSONBin:', err);
-    return {};
-  }
-}
-let employees = [];
-let missionRequests = [];
-let leaveRequests = [];
-let transportManager = null;
-let adminPassword = '1335';
-let adminProfile = { name: 'عباس', photo: '...' };
-let currentUser = null;
-let currentRole = null;
-
-loadDataFromJSONBin().then(data => {
-  if (!data) data = {}; // ← fallback
-
-  employees         = data.employees         || [];
-  missionRequests   = data.missionRequests   || [];
-  leaveRequests     = data.leaveRequests     || [];
-  adminPassword     = data.adminPassword     || '1335';
-  adminProfile      = data.adminProfile      || { name: 'عباس', photo: 'GR-logo.png' };
-});
-
-// 📤 ذخیره داده‌ها در JSONBin
-async function saveDataToJSONBin(data) {
-  try {
-    const response = await fetch(JSONBIN_BASE_URL, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_API_KEY,
-        'X-Bin-Versioning': false
-      },
-      body: JSON.stringify(data)
-    });
-    return await response.json();
-  } catch (err) {
-    console.error('خطا در ذخیره‌سازی در JSONBin:', err);
-  }
-}
-
-// 📦 ذخیره همه اطلاعات سیستم به JSONBin
-async function saveAllToJSONBin() {
-  const data = {
-    employees,
-    transportManager,
-    missionRequests,
-    leaveRequests,
-    adminPassword,
-    adminProfile
+  // 🧠 تعریف متغیرهای سراسری فقط یک بار
+  let adminPassword = '1335';
+  let adminProfile = {
+    name: 'عباس',
+    photo: 'https://j3rajerz.github.io/s.gh.tst2/GR-logo.png'
   };
-  await saveDataToJSONBin(data);
-}
+  let employees = [];
+  let missionRequests = [];
+  let leaveRequests = [];
+  let transportManager = null;
+  let currentUser = null;
+  let currentRole = null;
 
-  // ⬇️ این کد از قبل وجود داشت
-  $(document).ready(function() {
-    // تنظیم تقویم فارسی
-    $('#missionDate, #leaveDate, #exportStartDate, #exportEndDate, #searchStartDate, #searchEndDate').pDatepicker({
-      format: 'YYYY/MM/DD',
-      autoClose: true,
-      calendarType: 'persian',
-      initialValue: false,
-      toolbox: {
-        calendarSwitch: {
-          enabled: false
+  // 📥 بارگذاری داده‌ها از JSONBin
+  async function loadDataFromJSONBin() {
+    try {
+      const response = await fetch(`${JSONBIN_BASE_URL}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_API_KEY }
+      });
+      const result = await response.json();
+      return result.record;
+    } catch (err) {
+      console.error('❌ خطا در بارگذاری داده‌ها از JSONBin:', err);
+      return {};
+    }
+  }
+
+  // 📤 ذخیره داده‌ها در JSONBin
+  async function saveDataToJSONBin(data) {
+    try {
+      const response = await fetch(`${JSONBIN_BASE_URL}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': JSONBIN_API_KEY,
+          'X-Bin-Versioning': false
         },
-        todayButton: {
-          enabled: true,
-          text: {
-            fa: "📌 امروز"
-          }
-        },
-        submitButton: {
-          enabled: false
-        }
-      },
-      onShow: function() {
-        $('.datepicker-plot-area').css({
-          'background-color': '#1e1e1e',
-          'color': '#ffffff'
-        });
+        body: JSON.stringify(data)
+      });
+      return await response.json();
+    } catch (err) {
+      console.error('❌ خطا در ذخیره‌سازی در JSONBin:', err);
+    }
+  }
+
+  // 💾 ذخیره کل اطلاعات سیستم
+  async function saveAllToJSONBin() {
+    const data = {
+      adminPassword,
+      adminProfile,
+      employees,
+      missionRequests,
+      leaveRequests,
+      transportManager
+    };
+    await saveDataToJSONBin(data);
+  }
+
+  // ⚙️ بارگذاری داده‌ها هنگام لود شدن صفحه
+  document.addEventListener('DOMContentLoaded', () => {
+    loadDataFromJSONBin().then(data => {
+      if (!data) data = {};
+
+      employees        = data.employees        || [];
+      missionRequests  = data.missionRequests  || [];
+      leaveRequests    = data.leaveRequests    || [];
+      transportManager = data.transportManager || null;
+      adminPassword    = data.adminPassword    || '1335';
+      adminProfile     = data.adminProfile     || {
+        name: 'عباس',
+        photo: 'https://j3rajerz.github.io/s.gh.tst2/GR-logo.png'
+      };
+
+      if (adminProfile?.name && document.getElementById('adminFullName')) {
+        document.getElementById('adminFullName').value = adminProfile.name;
+      }
+
+      if (adminProfile?.photo && document.getElementById('adminProfileImage')) {
+        document.getElementById('adminProfileImage').src = adminProfile.photo;
       }
     });
-
-    // بارگذاری پروفایل مدیر
-    if (adminProfile) {
-      $('#adminFullName').val(adminProfile.name);
-    }
-
-    // پخش صوت راهنمای ورود
-    playSound('M1');
   });
-  document.getElementById('adminPhotoInput').addEventListener('change', function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function (event) {
-    adminProfile.photo = event.target.result; // ذخیره عکس به صورت base64
-    document.getElementById('adminProfileImage').src = adminProfile.photo; // نمایش آنی
-    saveAllToJSONBin(); // ذخیره در JSONBin
-  };
-  reader.readAsDataURL(file);
-});
-function loadEmployees() {
-    const listContainer = document.getElementById('employeesList');
-    listContainer.innerHTML = '';
+  // 📸 بارگذاری تصویر مدیر از ورودی فایل
+  const photoInput = document.getElementById('adminPhotoInput');
+  if (photoInput) {
+    photoInput.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
 
-    if (!employees || employees.length === 0) {
-      listContainer.innerHTML = '<p>هیچ کارمندی ثبت نشده است.</p>';
-      return;
-    }
-
-    employees.forEach(emp => {
-      const card = document.createElement('div');
-      card.className = 'card';
-
-      const imgSrc = emp.photo || 'https://j3rajerz.github.io/s.gh.tst2/avatar.png';
-
-      card.innerHTML = `
-        <div class="profile-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-          <img src="${imgSrc}" alt="عکس" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #aaa;">
-          <div>
-            <h4 style="margin: 0;">${emp.lastName}</h4>
-            <p style="margin: 4px 0; font-size: 13px; color: #666;">رمز عبور: ${emp.password}</p>
-          </div>
-        </div>
-      `;
-
-      listContainer.appendChild(card);
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        adminProfile.photo = event.target.result;
+        const img = document.getElementById('adminProfileImage');
+        if (img) img.src = adminProfile.photo;
+        saveAllToJSONBin();
+      };
+      reader.readAsDataURL(file);
     });
   }
-
 </script>
 </body>
 </html>
